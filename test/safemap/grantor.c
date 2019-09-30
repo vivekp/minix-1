@@ -15,7 +15,7 @@ int main(int argc, char **argv)
 	endpoint_t ep_self, ep_requestor, ep_child;
 	cp_grant_id_t gid;
 	int i, r, pid;
-	char *buf;
+	char *buff;
 	int status;
 
 	/* SEF local startup. */
@@ -23,7 +23,7 @@ int main(int argc, char **argv)
 	sef_local_startup();
 
 	/* Prepare work. */
-	buf = (char*) CLICK_CEIL(buf_buf);
+	buff = (char*) CLICK_CEIL(buf_buf);
 	fid_send = open(FIFO_GRANTOR, O_WRONLY);
 	fid_get = open(FIFO_REQUESTOR, O_RDONLY);
 	if(fid_get < 0 || fid_send < 0) {
@@ -61,7 +61,7 @@ int main(int argc, char **argv)
 		printf("GRANTOR: error in sys_saferevmap_gid: %d\n", r);
 		return 1;
 	}
-	buf[0] = BUF_START_GRANTOR+1;
+	buff[0] = BUF_START_GRANTOR+1;
 	FIFO_NOTIFY(fid_send);
 	FIFO_WAIT(fid_get);
 	CHECK_TEST("GRANTOR", buf[0], BUF_START_GRANTOR+1, "REVOKE");
@@ -69,7 +69,7 @@ int main(int argc, char **argv)
 	/* Test SMAP_COW. */
 	FIFO_NOTIFY(fid_send);
 	FIFO_WAIT(fid_get);
-	buf[0] = BUF_START_GRANTOR;
+	buff[0] = BUF_START_GRANTOR;
 	FIFO_NOTIFY(fid_send);
 	FIFO_WAIT(fid_get);
 	CHECK_TEST("GRANTOR", buf[0], BUF_START_GRANTOR, "SMAP_COW");
